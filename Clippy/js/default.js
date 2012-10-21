@@ -13,16 +13,26 @@
             if (args.detail.previousExecutionState !== activation.ApplicationExecutionState.terminated) {
                 // TODO: This application has been newly launched. Initialize
                 // your application here.
-                BingImageSearch.Bing.imageSearchAsync("california no doubt about it").then(
+                BingImageSearch.Bing.imageSearchAsync("curiosity killed the cat").then(
                     function (result) {
                         var json = JSON.parse(result);
                         var results = json.d.results;
 
-                        results.forEach(function (img) {
-                            TileManager.insertTile(img);
-                        });
+                        while (results.length > 0) {
+                            var imagesPerTile = Math.floor((Math.random() * 4)) + 1;
+                            var tiles = results.splice(0, imagesPerTile);
+                            TileManager.insertPanel(tiles);
+                        }
 
-                        Debug.writeln('SUCCESS - \n' + JSON.stringify(results));
+                        /*
+                        var x = -300;
+                        setInterval(function () {
+                            $('.stripe ul').css({
+                                'left': x.toString() + 'px',
+                            });
+                            x -= 300;
+                        }, 3000);
+                        */
                     },
                     function error(err) {
                         Debug.writeln('ERROR - ' + err);

@@ -59,6 +59,7 @@
     <AppxManifest Include="package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="images\tinytrans.gif" />
     <Content Include="js\default.js" />
     <Content Include="js\jquery-1.8.2.min.js" />
     <Content Include="js\jsrender.js" />
