@@ -11,12 +11,22 @@
 
     <!-- Clippy references -->
     <link href="/css/default.css" rel="stylesheet" />
+    <script src="/js/jquery-1.8.2.min.js"></script>
+    <script src="/js/jsrender.js"></script>
+    <script src="/js/tilemanager.js"></script>
     <script src="/js/default.js"></script>
 </head>
 <body>
+    <script id="tileTemplate" type="text/x-jsrender">
+        <li>
+            <img class="tile" src={{:Thumbnail.MediaUrl}} />
+        </li>
+    </script>
     <div data-win-control="WinJS.UI.ViewBox">
         <div class="fixedlayout">
-            <p>Content goes here</p>
+            <ul class="strip">
+
+            </ul>
         </div>
     </div>
 </body>

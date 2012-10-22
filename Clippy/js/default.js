@@ -13,10 +13,14 @@
             if (args.detail.previousExecutionState !== activation.ApplicationExecutionState.terminated) {
                 // TODO: This application has been newly launched. Initialize
                 // your application here.
-                BingImageSearch.Bing.imageSearchAsync("california").then(
+                BingImageSearch.Bing.imageSearchAsync("california no doubt about it").then(
                     function (result) {
                         var json = JSON.parse(result);
                         var results = json.d.results;
+
+                        results.forEach(function (img) {
+                            TileManager.insertTile(img);
+                        });
 
                         Debug.writeln('SUCCESS - \n' + JSON.stringify(results));
                     },
