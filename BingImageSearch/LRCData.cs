@@ -22,6 +22,8 @@ namespace BingImageSearch
         private Regex _titleRegex;
         private Regex _albumRegex;
         private IList<LyricInfo> _lines;
+        private bool _playing = false;
+        private CoreDispatcher _dispatcher;
 
         private const string REGEX_PATTERN = @"^\[(\d\d):(\d\d)\.(\d\d)\](.*)";
         private const string ARTIST_PATTERN = @"\[ar:(.*)\]";
@@ -37,33 +39,84 @@ namespace BingImageSearch
             _lines = new List<LyricInfo>();
         }
 
-        public void startPlay()
+        public void play()
+        {
+            play(0);
+        }
+
+        public void play(int startTimeMillis)
         {
             var window = Windows.UI.Core.CoreWindow.GetForCurrentThread();
             _dispatcher = window.Dispatcher;
-            //_dispatcher = Window.Current.Dispatcher;
-            waitAndCallEvent(0);
-        }
-        CoreDispatcher _dispatcher;
+            _playing = true;
 
-        private void waitAndCallEvent(int index)
+            int startPointIndex = -1;
+            if (startTimeMillis <= 0)
+            {
+                startPointIndex = 0;
+            }
+            else
+            {
+                for (int i = 0; i < _lines.Count; i++)
+                {
+                    LyricInfo inf = _lines[i];
+                    if (inf.ShowTimeMillis > startTimeMillis)
+                    {
+                        startPointIndex = i - 1;
+                        break;
+                    }
+                }
+            }
+
+            if (startPointIndex == -1)
+                return;
+
+            waitAndCallEvent(startPointIndex,startTimeMillis);
+        }
+
+        /*public void playFromPoint(int millisFromStart)
         {
-            int prevShowTime = 0;
+            int startPointIndex = -1;
+            for (int i=0; i < _lines.Count; i++)
+            {
+                LyricInfo inf = _lines[i];
+                if (inf.ShowTimeMillis > millisFromStart)
+                {
+                    startPointIndex = i - 1;
+                    break;
+                }
+            }
+        }*/
+
+        private void waitAndCallEvent(int index,int startTime)
+        {
+            int prevShowTime = startTime;
             if (index > 0)
-                prevShowTime = _lines[index - 1].ShowTimeMillis;
-            TimeSpan ts = new TimeSpan(0, 0, 0, 0, _lines[index].ShowTimeMillis - prevShowTime);
+                prevShowTime = Math.Max(_lines[index - 1].ShowTimeMillis,startTime);
+            
+            TimeSpan ts = new TimeSpan(0, 0, 0, 0, Math.Max(0,_lines[index].ShowTimeMillis -prevShowTime-100));
+            
             Task.Delay(ts).ContinueWith((i) =>
             {
-                _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                if (!_playing)
+                {
+                    return;
+                }
+                _dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                 {
                     onNextLinePlayed(_lines[index]);
                 });
                 
                     
                 //onNextLinePlayed(_lines[index]);
-                index += 1;
-                waitAndCallEvent(index);
+                
+                waitAndCallEvent(index+1,startTime);
             });
+        }
+
+        private void Stop()
+        {
+            _playing = false;
         }
 
         public String Artist
@@ -182,7 +235,7 @@ namespace BingImageSearch
 
         private static async Task<LyricInfo> fillLyrics(LyricInfo inf)
         {
-            JsonObject jsObj = await Bing.ImageSearchJsonAsyncInternal(inf.Text,10);
+            /*JsonObject jsObj = await Bing.ImageSearchJsonAsyncInternal(inf.Text,10);
 
             JsonArray arr = JsonObject.Parse(jsObj["d"].Stringify())["results"].GetArray();
             foreach (JsonValue val in arr)
@@ -190,9 +243,9 @@ namespace BingImageSearch
                 JsonObject thumbnail = JsonObject.Parse(JsonObject.Parse(val.Stringify())["Thumbnail"].Stringify());
                 String link = thumbnail["MediaUrl"].Stringify().Trim('\"');
                 inf.ImageLinks.Add(link);
-            }
+            }*/
 
-            return inf;   
+            return inf;
         }
 
         private static List<List<LyricInfo>> splitToLists(IList<LyricInfo> lst, int n)
