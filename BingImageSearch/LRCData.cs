@@ -210,6 +210,11 @@ namespace BingImageSearch
             return ParseLRCFileInternal(filePath).AsAsyncOperation<LRCData>();
         }
 
+        public static string prepareBingQuery(String line)
+        {
+            String goodChars = "[a-zA-z0-9]";
+        }
+
         private static async Task<LRCData> ParseLRCFileInternal(string Path)
         {
             LRCData data = new LRCData();
