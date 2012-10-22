@@ -147,7 +147,7 @@ namespace BingImageSearch
 
         private static async Task<LyricInfo> fillLyrics(LyricInfo inf)
         {
-            JsonObject jsObj = await Bing.ImageSearchJsonAsyncInternal(inf.Text);
+            JsonObject jsObj = await Bing.ImageSearchJsonAsyncInternal(inf.Text, 10);
 
             JsonArray arr = JsonObject.Parse(jsObj["d"].Stringify())["results"].GetArray();
             foreach (JsonValue val in arr)
@@ -182,39 +182,15 @@ namespace BingImageSearch
 
     public sealed class LyricInfo
     {
-        private int _id;
+        public int Id { get; private set; }
+        public String Text { get; set; }
+        public long ShowTimeMillis { get; set; }
+        public IList<string> ImageLinks { get; private set; }
+
         public LyricInfo(int id)
         {
-            _id = id;
-        }
-
-        private IList<String> _imageLinks = new List<String>();
-        public long ShowTimeMillis
-        {
-            get;
-            set;
-        }
-
-        public String Text
-        {
-            get;
-            set;
-        }
-
-        public IList<string> ImageLinks
-        {
-            get
-            {
-                return _imageLinks;
-            }
-        }
-
-        private int Id
-        {
-            get
-            {
-                return _id;
-            }
+            Id = id;
+            ImageLinks = new List<String>();
         }
     }
 }

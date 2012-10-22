@@ -12,9 +12,25 @@
             
             var panel = $("#panelTemplate" + tileKind).render({ tiles: images, theme: theme });
             $('.stripe ul').append(panel);
-        }
+        },
+        load: function (filename) {
+            BingImageSearch.LRCData.praseLRCFile().then(
+                function (lrcdata) {
 
+                },
+                function (err) {
+
+                });
+
+        }
     };
+
+    function createPanelForLine(lyricInfo) {
+        var imagesPerTile = Math.floor((Math.random() * 4)) + 1;
+        var tiles = results.splice(0, imagesPerTile);
+        manager.insertPanel(tiles);
+
+    }
 
     WinJS.Namespace.define('TileManager', manager);
 }).call(this, jQuery);
