@@ -72,19 +72,19 @@ body {
     display: block;
     position: absolute;
     left: 0px;
-    width: 3000px;
-    height: 600px;
+    white-space: nowrap;
+    height: 500px;
     transition: left 1s ease-in-out;
 }
 
 .stripe ul li {
-    display: block;
-    float: left;
+    display: inline-block;
     list-style-type: none;
     padding-right: 20px;
     width: 500px;
     height: 500px;
     overflow: hidden;
+    white-space: normal;
 }
 
 .stripe ul .wide {
