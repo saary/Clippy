@@ -13,7 +13,7 @@
             if (args.detail.previousExecutionState !== activation.ApplicationExecutionState.terminated) {
                 // TODO: This application has been newly launched. Initialize
                 // your application here.
-                BingImageSearch.Bing.imageSearchAsync("curiosity killed the cat").then(
+                BingImageSearch.Bing.imageSearchAsync("viva la vida", 30).then(
                     function (result) {
                         var json = JSON.parse(result);
                         var results = json.d.results;
@@ -24,7 +24,7 @@
                             TileManager.insertPanel(tiles);
                         }
 
-                        /*
+                        
                         var x = -300;
                         setInterval(function () {
                             $('.stripe ul').css({
@@ -32,7 +32,7 @@
                             });
                             x -= 300;
                         }, 3000);
-                        */
+                        
                     },
                     function error(err) {
                         Debug.writeln('ERROR - ' + err);

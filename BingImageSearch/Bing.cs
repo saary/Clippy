@@ -8,6 +8,7 @@ using Windows.Data.Json;
 using Windows.Foundation;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Net;
+using System.Diagnostics;
 
 namespace BingImageSearch
 {
@@ -17,36 +18,46 @@ namespace BingImageSearch
 
         public static IAsyncOperation<string> ImageSearchAsync(string query)
         {
-            return ImageSearchAsyncInternal(query).AsAsyncOperation();
+            return ImageSearchAsyncInternal(query, 10).AsAsyncOperation();
         }
 
         public static IAsyncOperation<JsonObject> ImageSearcJsonAsync(string query)
         {
-            return ImageSearchJsonAsyncInternal(query).AsAsyncOperation();
+            return ImageSearchJsonAsyncInternal(query, 10).AsAsyncOperation();
         }
 
-        internal async static Task<string> ImageSearchAsyncInternal(string query)
+        public static IAsyncOperation<string> ImageSearchAsync(string query, int limit)
         {
-            string uri = "https://api.datamarket.azure.com/Data.ashx/Bing/Search/v1/Image?Query=%27{0}%27&$top=10&$format=Json";
+            return ImageSearchAsyncInternal(query, limit).AsAsyncOperation();
+        }
 
+        public static IAsyncOperation<JsonObject> ImageSearcJsonAsync(string query, int limit)
+        {
+            return ImageSearchJsonAsyncInternal(query, limit).AsAsyncOperation();
+        }
+
+        internal async static Task<string> ImageSearchAsyncInternal(string query, int limit)
+        {
+            string uri = "https://api.datamarket.azure.com/Data.ashx/Bing/Search/v1/Image?Query=%27{0}%27&$top={1}&$format=Json";
 
             try
             {
                 using (var handler = new HttpClientHandler { Credentials = new NetworkCredential(AZURE_KEY, AZURE_KEY) })
                 using (var http = new HttpClient(handler))
                 {
-                    return await http.GetStringAsync(new Uri(string.Format(uri, query)));
+                    return await http.GetStringAsync(new Uri(string.Format(uri, query, limit)));
                 }
             }
             catch (Exception e)
-            {              
+            {
+                Debug.WriteLine(e.ToString());
                 return string.Empty;
             }
         }
 
-        internal async static Task<JsonObject> ImageSearchJsonAsyncInternal(string query)
+        internal async static Task<JsonObject> ImageSearchJsonAsyncInternal(string query, int limit)
         {
-            string result = await ImageSearchAsyncInternal(query);
+            string result = await ImageSearchAsyncInternal(query, limit);
             return JsonObject.Parse(result);
         }
     }
