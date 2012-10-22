@@ -28,7 +28,6 @@ namespace BingImageSearch
         private const string TITILE_PATTERN = @"\[ti:(.*)\]";
         private const string ALBUM_PATTERN = @"\[al:(.*)\]";
 
-
         public LRCData()
         {
             _timeRegex = new Regex(REGEX_PATTERN);
@@ -233,39 +232,15 @@ namespace BingImageSearch
 
     public sealed class LyricInfo
     {
-        private int _id;
+        public int Id { get; private set; }
+        public String Text { get; set; }
+        public int ShowTimeMillis { get; set; }
+        public IList<string> ImageLinks { get; private set; }
+
         public LyricInfo(int id)
         {
-            _id = id;
-        }
-
-        private IList<String> _imageLinks = new List<String>();
-        public int ShowTimeMillis
-        {
-            get;
-            set;
-        }
-
-        public String Text
-        {
-            get;
-            set;
-        }
-
-        public IList<string> ImageLinks
-        {
-            get
-            {
-                return _imageLinks;
-            }
-        }
-
-        private int Id
-        {
-            get
-            {
-                return _id;
-            }
+            Id = id;
+            ImageLinks = new List<String>();
         }
     }
 }
