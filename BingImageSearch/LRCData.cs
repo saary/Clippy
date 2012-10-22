@@ -11,6 +11,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Data.Json;
 using Windows.UI.Xaml;
 using Windows.UI.Core;
+using System.Diagnostics;
 
 namespace BingImageSearch
 {
@@ -187,9 +188,10 @@ namespace BingImageSearch
                         _lines.Add(new LyricInfo(_lines.Count) { ShowTimeMillis = time, Text = text });
                     }
                 } 
-                catch
+                catch(Exception e)
                 {
                     // ..
+                    Debug.WriteLine(e.ToString());
                 }
             }
         }
