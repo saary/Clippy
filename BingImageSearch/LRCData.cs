@@ -9,9 +9,12 @@ using Windows.ApplicationModel;
 using Windows.Foundation;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Data.Json;
+using Windows.UI.Xaml;
+using Windows.UI.Core;
 
 namespace BingImageSearch
 {
+    public delegate void NextLinePlayedEventHandler(LyricInfo inf);
     public sealed class LRCData
     {
         private Regex _timeRegex;
@@ -33,6 +36,35 @@ namespace BingImageSearch
             _albumRegex = new Regex(ALBUM_PATTERN);
             _titleRegex = new Regex(TITILE_PATTERN);
             _lines = new List<LyricInfo>();
+        }
+
+        public void startPlay()
+        {
+            var window = Windows.UI.Core.CoreWindow.GetForCurrentThread();
+            _dispatcher = window.Dispatcher;
+            //_dispatcher = Window.Current.Dispatcher;
+            waitAndCallEvent(0);
+        }
+        CoreDispatcher _dispatcher;
+
+        private void waitAndCallEvent(int index)
+        {
+            int prevShowTime = 0;
+            if (index > 0)
+                prevShowTime = _lines[index - 1].ShowTimeMillis;
+            TimeSpan ts = new TimeSpan(0, 0, 0, 0, _lines[index].ShowTimeMillis - prevShowTime);
+            Task.Delay(ts).ContinueWith((i) =>
+            {
+                _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    onNextLinePlayed(_lines[index]);
+                });
+                
+                    
+                //onNextLinePlayed(_lines[index]);
+                index += 1;
+                waitAndCallEvent(index);
+            });
         }
 
         public String Artist
@@ -60,6 +92,10 @@ namespace BingImageSearch
                 return _lines;
             }
         }
+
+        //public event EventHandler<LyricsEventArgs> onNextLinePlayed;
+        public event NextLinePlayedEventHandler onNextLinePlayed;
+        
 
         private void ParseLine(String line)
         {
@@ -92,7 +128,7 @@ namespace BingImageSearch
      
                 try
                 {
-                    long time = long.Parse(m.Groups[1].Value)*1000*60 + long.Parse(m.Groups[2].Value)*1000+long.Parse(m.Groups[3].Value);
+                    int time = int.Parse(m.Groups[1].Value)*1000*60 + int.Parse(m.Groups[2].Value)*1000+int.Parse(m.Groups[3].Value);
                     String text = m.Groups[4].Value;
                     if (!String.IsNullOrEmpty(text))
                     {
@@ -125,12 +161,12 @@ namespace BingImageSearch
         private static async Task<LRCData> ParseLRCFileInternal(string Path)
         {
             LRCData data = new LRCData();
-            var folder = Package.Current.InstalledLocation;
-            var file = await folder.GetFileAsync(Path);
+            //var folder = Package.Current.InstalledLocation;
+            var musicFolder = Windows.Storage.KnownFolders.MusicLibrary;
+            var file = await musicFolder.GetFileAsync(Path);
             var stream = await System.IO.WindowsRuntimeStorageExtensions.OpenStreamForReadAsync(file);
             data.FillFromLRCFile(stream);
 
-            
             System.Threading.ManualResetEvent e = new System.Threading.ManualResetEvent(false);
             List<Task<LyricInfo>> tasks = new List<Task<LyricInfo>>();
             List<List<LyricInfo>> l = splitToLists(data.Lines, 1);
@@ -147,7 +183,7 @@ namespace BingImageSearch
 
         private static async Task<LyricInfo> fillLyrics(LyricInfo inf)
         {
-            JsonObject jsObj = await Bing.ImageSearchJsonAsyncInternal(inf.Text);
+            JsonObject jsObj = await Bing.ImageSearchJsonAsyncInternal(inf.Text,10);
 
             JsonArray arr = JsonObject.Parse(jsObj["d"].Stringify())["results"].GetArray();
             foreach (JsonValue val in arr)
@@ -180,6 +216,21 @@ namespace BingImageSearch
 
     }
 
+    public sealed class LyricsEventArgs
+    {
+        public LyricsEventArgs(LyricInfo inf)
+        {
+            LyricInfo = inf;
+        }
+
+        public LyricInfo LyricInfo
+        {
+            get;
+            private set;
+
+        }
+    }
+
     public sealed class LyricInfo
     {
         private int _id;
@@ -189,7 +240,7 @@ namespace BingImageSearch
         }
 
         private IList<String> _imageLinks = new List<String>();
-        public long ShowTimeMillis
+        public int ShowTimeMillis
         {
             get;
             set;
