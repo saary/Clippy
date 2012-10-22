@@ -58,16 +58,7 @@ namespace BingImageSearch
         internal async static Task<JsonObject> ImageSearchJsonAsyncInternal(string query, int limit)
         {
             string result = await ImageSearchAsyncInternal(query, limit);
-
-            try
-            {
-                return JsonObject.Parse(result);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.ToString());
-                return new JsonObject();
-            }
+            return JsonObject.Parse(result);
         }
     }
 }

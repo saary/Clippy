@@ -12,21 +12,7 @@
         if (args.detail.kind === activation.ActivationKind.launch) {
             if (args.detail.previousExecutionState !== activation.ApplicationExecutionState.terminated) {
 
-                TileManager.load('- Viva La Vida-lrc-base.com.lrc', function (err) {
-                    if (err) {
-                        Debug.writeln('Failed to load clip');
-                        return;
-                    }
-
-                    var x = -300;
-                    setInterval(function () {
-                        $('.stripe ul').css({
-                            'left': x.toString() + 'px',
-                        });
-                        x -= 300;
-                    }, 3000);
-
-                });
+                TileManager.load('- Everytime We Touch (radio Mix)-lrc-base.com.lrc');
                 //BingImageSearch.Bing.imageSearchAsync("viva la vida", 30).then(
                 //    function (result) {
                 //        var json = JSON.parse(result);

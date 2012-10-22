@@ -5,27 +5,22 @@
             var item = $("#tileTemplate").render(img);
             $('.stripe ul').append(item);
         },
-        insertPanel: function (id, images) {
+        insertPanel: function (images) {
             var durations = [];
             images.forEach(function (img) { durations.push(Math.random()); });
             var tileKind = images.length;
             var theme = ["theme1", "theme2", "theme3"][Math.floor(Math.random() * 3)];
             
-            var panel = $("#panelTemplate" + tileKind).render({ tiles: images, durations: durations, theme: theme, id:id });
+            var panel = $("#panelTemplate" + tileKind).render({ tiles: images, durations: durations, theme: theme });
             $('.stripe ul').append(panel);
         },
-        load: function (filename, cb) {
-            cb = cb || function () { };
+        load: function (filename) {
             BingImageSearch.LRCData.praseLRCFile(filename).then(
                 function (lrcdata) {
-                    for (var i = 0, l = lrcdata.lines.size; i < l; i++) {
-                        var lyricInfo = lrcdata.lines[i];
-                        lineToPanels(lyricInfo);
-                        cb(null);
-                    }
+                    Debug.writeln(lrc.Lines.length);
                 },
                 function (err) {
-                    cb(err);
+
                 });
         }
     };
@@ -42,22 +37,19 @@
     }
 
     function lineToPanels(lyricInfo) {
-        var count = Math.floor(lyricInfo.text.length / 10);
+        var count = Math.floor(lyricInfo.Text.length / 20);
 
-        var images = [];
-        for (var i = 0, l = lyricInfo.imageLinks.size; i < l; i++) {
-            images.push(lyricInfo.imageLinks[i]);
-        }
+        var images = lyricInfo.ImageLinks.AsArray();
         randomPermutation(images);
         images.splice(count);
-        addPanels(lyricInfo.id, images);
+        addPanels(images);
     }
 
     function addPanels(id, images) {
         while (images.length > 0) {
             var imagesPerTile = Math.floor((Math.random() * 4)) + 1;
             var tiles = images.splice(0, imagesPerTile);
-            TileManager.insertPanel(id, tiles);
+            TileManager.insertPanel(tiles);
         }
     }
 
