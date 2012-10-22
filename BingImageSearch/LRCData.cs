@@ -25,7 +25,6 @@ namespace BingImageSearch
         private const string TITILE_PATTERN = @"\[ti:(.*)\]";
         private const string ALBUM_PATTERN = @"\[al:(.*)\]";
 
-
         public LRCData()
         {
             _timeRegex = new Regex(REGEX_PATTERN);

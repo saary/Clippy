@@ -11,32 +11,32 @@
     app.onactivated = function (args) {
         if (args.detail.kind === activation.ActivationKind.launch) {
             if (args.detail.previousExecutionState !== activation.ApplicationExecutionState.terminated) {
-                // TODO: This application has been newly launched. Initialize
-                // your application here.
-                BingImageSearch.Bing.imageSearchAsync("viva la vida", 30).then(
-                    function (result) {
-                        var json = JSON.parse(result);
-                        var results = json.d.results;
 
-                        while (results.length > 0) {
-                            var imagesPerTile = Math.floor((Math.random() * 4)) + 1;
-                            var tiles = results.splice(0, imagesPerTile);
-                            TileManager.insertPanel(tiles);
-                        }
+                TileManager.load('- Everytime We Touch (radio Mix)-lrc-base.com.lrc');
+                //BingImageSearch.Bing.imageSearchAsync("viva la vida", 30).then(
+                //    function (result) {
+                //        var json = JSON.parse(result);
+                //        var results = json.d.results;
+
+                //        while (results.length > 0) {
+                //            var imagesPerTile = Math.floor((Math.random() * 4)) + 1;
+                //            var tiles = results.splice(0, imagesPerTile);
+                //            TileManager.insertPanel(tiles);
+                //        }
 
                         
-                        var x = -300;
-                        setInterval(function () {
-                            $('.stripe ul').css({
-                                'left': x.toString() + 'px',
-                            });
-                            x -= 300;
-                        }, 3000);
+                //        var x = -300;
+                //        setInterval(function () {
+                //            $('.stripe ul').css({
+                //                'left': x.toString() + 'px',
+                //            });
+                //            x -= 300;
+                //        }, 3000);
                         
-                    },
-                    function error(err) {
-                        Debug.writeln('ERROR - ' + err);
-                    });
+                //    },
+                //    function error(err) {
+                //        Debug.writeln('ERROR - ' + err);
+                //    });
             } else {
                 // TODO: This application has been reactivated from suspension.
                 // Restore application state here.
