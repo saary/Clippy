@@ -212,10 +212,12 @@ namespace BingImageSearch
             return ParseLRCFileInternal(filePath).AsAsyncOperation<LRCData>();
         }
 
-        public static string prepareBingQuery(String line)
+        /*public static string prepareBingQuery(String line)
         {
-            String goodChars = "[a-zA-z0-9]";
-        }
+            String goodChars = "[^a-zA-z0-9]";
+            Regex r = new Regex(goodChars);
+            string replaced = r.Replace(line, "");
+        }*/
 
         private static async Task<LRCData> ParseLRCFileInternal(string Path)
         {
@@ -242,7 +244,7 @@ namespace BingImageSearch
 
         private static async Task<LyricInfo> fillLyrics(LyricInfo inf)
         {
-            /*JsonObject jsObj = await Bing.ImageSearchJsonAsyncInternal(inf.Text,10);
+            JsonObject jsObj = await Bing.ImageSearchJsonAsyncInternal(inf.Text,10);
 
             JsonArray arr = JsonObject.Parse(jsObj["d"].Stringify())["results"].GetArray();
             foreach (JsonValue val in arr)
@@ -250,7 +252,7 @@ namespace BingImageSearch
                 JsonObject thumbnail = JsonObject.Parse(JsonObject.Parse(val.Stringify())["Thumbnail"].Stringify());
                 String link = thumbnail["MediaUrl"].Stringify().Trim('\"');
                 inf.ImageLinks.Add(link);
-            }*/
+            }
 
             return inf;
         }
