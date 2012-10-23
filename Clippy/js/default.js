@@ -12,6 +12,8 @@
         if (args.detail.kind === activation.ActivationKind.launch) {
             if (args.detail.previousExecutionState !== activation.ApplicationExecutionState.terminated) {
 
+                MusicPlayer.bind();
+                MusicPlayer.pickMusicFilesToPlay();
                 TileManager.load('- Viva La Vida-lrc-base.com.lrc', function (err) {
                     if (err) {
                         Debug.writeln('Failed to load clip');

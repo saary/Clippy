@@ -14,7 +14,8 @@ namespace BingImageSearch
 {
     public sealed class Bing
     {
-        const string AZURE_KEY = "C60eZha7o/m9iAjFvWCKvS3oJIjgtD/aDCPqV0nBe38=";
+        //const string AZURE_KEY = "C60eZha7o/m9iAjFvWCKvS3oJIjgtD/aDCPqV0nBe38=";
+        const string AZURE_KEY = "rZiyTPQM0H3SWCAAhiIUruaFNr5gCtdni2S2AwMzs3o=";
 
         public static IAsyncOperation<string> ImageSearchAsync(string query)
         {

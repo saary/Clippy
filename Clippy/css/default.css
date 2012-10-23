@@ -123,3 +123,17 @@ body {
 .theme3 .color2 {
     background-color: #86B32D;
 }
+
+.invisible
+{
+    display:none;
+}
+.audioContainer
+{
+    
+    left:300px;
+}
+.audioPlayer
+{
+    width:100%;
+}

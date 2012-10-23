@@ -63,6 +63,7 @@
     <Content Include="js\default.js" />
     <Content Include="js\jquery-1.8.2.min.js" />
     <Content Include="js\jsrender.js" />
+    <Content Include="js\musicPlayer.js" />
     <Content Include="js\tilemanager.js" />
     <None Include="Clippy_TemporaryKey.pfx" />
   </ItemGroup>
