@@ -14,7 +14,7 @@ var musicPlayer = {
         console.log("song ended");
     },
     onTimeupdate: function (e) {
-        var lyricInfo = BingImageSearch.LRCData.getInfo(musicPlayer.currentTime());
+        //var lyricInfo = BingImageSearch.LRCData.getInfo(musicPlayer.currentTime());
 
 
         console.log("time update.. " + musicPlayer.currentTime());
