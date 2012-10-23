@@ -15,6 +15,7 @@
     <script src="/js/jsrender.js"></script>
     <script src="/js/tilemanager.js"></script>
     <script src="/js/musicPlayer.js"></script>
+    <script src="/js/appbar.js"></script>
     <script src="/js/default.js"></script>
 </head>
 <body>
@@ -60,6 +61,9 @@
             </audio>
         </div>
     </div>
-    
+    <div class="customIconsAppBar" data-win-control="WinJS.UI.AppBar" data-win-options="">
+        <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'cmdFilePicker',label:'Choose Song',icon:'more',section:'global',tooltip:'Choose a song to play'}">
+        </button>
+    </div>
 </body>
 </html>

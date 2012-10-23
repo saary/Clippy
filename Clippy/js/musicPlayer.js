@@ -13,8 +13,11 @@ var musicPlayer = {
     onEnded: function (e) {
         console.log("song ended");
     },
-    onPlaying: function (e) {
-        console.log("Playing.. " + musicPlayer.currentTime());
+    onTimeupdate: function (e) {
+        var lyricInfo = BingImageSearch.LRCData.getInfo(musicPlayer.currentTime());
+
+
+        console.log("time update.. " + musicPlayer.currentTime());
     },
 
     bind: function () {
@@ -24,7 +27,7 @@ var musicPlayer = {
         musicPlayer.audioPlayerHTML.onplay = musicPlayer.onPlay;
         musicPlayer.audioPlayerHTML.onpause = musicPlayer.onPause;
         musicPlayer.audioPlayerHTML.onended = musicPlayer.onEnded;
-        musicPlayer.audioPlayerHTML.onplaying = musicPlayer.onPlaying;
+        musicPlayer.audioPlayerHTML.ontimeupdate = musicPlayer.onTimeupdate;
     },
 
     setSourceFromFile: function (file) {
@@ -55,6 +58,11 @@ var musicPlayer = {
             //    outputString = outputString + files[i].name + "\n";
             //}
             //console.log(outputString, "sample", "status");
+
+            // Operation was cancelled.
+            if (!files) {
+                return;
+            }
             musicPlayer.filesToPlay = files;
             musicPlayer.setSourceFromFile(musicPlayer.filesToPlay);
             //} else {
@@ -66,6 +74,14 @@ var musicPlayer = {
 
     currentTime: function () {
         return musicPlayer.audioPlayerHTML.currentTime
+    },
+
+    play: function () {
+        return musicPlayer.audioPlayerHTML.play();
+    },
+
+    pause: function () {
+        return musicPlayer.audioPlayerHTML.pause();
     },
 }
 
